@@ -126,7 +126,7 @@ public class PrIS {
 		String csvFile = "././CSV/docenten.csv";
 		BufferedReader br = null;
 		String line = "";
-		String cvsSplitBy = ",";
+		String cvsSplitBy = ";";
 
 		try {
 
@@ -185,7 +185,7 @@ public class PrIS {
 			String csvFile = "././CSV/" + k.getNaam() + ".csv";
 			BufferedReader br = null;
 			String line = "";
-			String cvsSplitBy = ",";
+			String cvsSplitBy = ";";
 
 			try {
 
