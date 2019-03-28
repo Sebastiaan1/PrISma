@@ -141,10 +141,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </a>
 
           <!-- altijd beschikbaar -->
-          <a name="systeem_instellen_systeemdatum" href$="[[_c_baseURL]]systeem_instellen_systeemdatum" >
-            <iron-icon icon="icons:today"></iron-icon>
-            <span>(test) Instellen systeemdatum</span>
-          </a>
 
           <a name="login" href$="[[_c_baseURL]]login"  verborgen$="[[!_are_strings_equal(_rol, 'undefined')]]">
             <iron-icon icon="account-box"></iron-icon>
@@ -156,15 +152,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <span>Uitloggen</span>
           </a>
 
-          <a name="rooster" href$="[[_c_baseURL]]roosterpagina"  verborgen$="[[_are_strings_equal(_rol, 'undefined')]]">
+          <a name="roosterpagina" href$="[[_c_baseURL]]roosterpagina"  verborgen$="[[_are_strings_equal(_rol, 'undefined')]]">
             <iron-icon icon="date-range"></iron-icon>
             <span>Rooster bekijken</span>
+          </a>
+
+          <a name="systeem_instellen_systeemdatum" href$="[[_c_baseURL]]systeem_instellen_systeemdatum" verborgen$="[[_are_strings_equal(_rol, 'docent')]]" >
+            <iron-icon icon="icons:today"></iron-icon>
+            <span>(test) Instellen systeemdatum</span>
           </a>
 
           <!-- beschikbaar voor docent -->
 
           <!-- beschikbaar voor student -->
-          <a name="student_medestudenten" href$="[[_c_baseURL]]student_medestudenten"  verborgen$="[[!_are_strings_equal(_rol, 'student')]]">
+          <a name="student_medestudenten" href$="[[_c_baseURL]]student_medestudenten" verborgen$="[[!_are_strings_equal(_rol, 'student')]]">
             <iron-icon icon="social:group"></iron-icon>
             <span>Toon medestudenten</span>
           </a>
