@@ -37,19 +37,17 @@ public class Rooster {
 
     }
 
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (this == obj)
-//            return true;
-//        boolean gelijk = false;
-//        if (obj instanceof Persoon) {
-//            Persoon p = (Persoon) obj;
-//            gelijk = this.voornaam.equals(p.voornaam) && this.tussenvoegsel.equals(p.tussenvoegsel)
-//                    && this.achternaam.equals(p.achternaam) && this.wachtwoord.equals(p.wachtwoord)
-//                    && this.gebruikersnaam.equals(gebruikersnaam);
-//        }
-//        return gelijk;
-//    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        boolean gelijk = false;
+        if (obj instanceof Rooster) {
+            Rooster r = (Rooster) obj;
+            gelijk = this.groep.equals(r.groep);
+        }
+        return gelijk;
+    }
 
     public String getCursuscode(){
         return cursuscode;
