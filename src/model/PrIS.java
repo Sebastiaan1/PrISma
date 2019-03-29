@@ -157,7 +157,7 @@ public class PrIS {
 			}
 			// verify content of arraylist, if empty add Jos
 			if (pDocenten.isEmpty())
-				pDocenten.add(new Docent("Jos", "van", "Reenen", "supergeheim", "jos.vanreenen@hu.nl", 1));
+				pDocenten.add(new Docent("Jos", "van", "Reenen", "supertest", "jos.vanreenen@hu.nl", 1));
 		}
 	}
 
@@ -180,7 +180,7 @@ public class PrIS {
 
 	private void vulStudenten(ArrayList<Student> pStudenten, ArrayList<Klas> pKlassen) {
 		Student lStudent;
-		Student dummyStudent = new Student("Stu", "de", "Student", "geheim", "test@student.hu.nl", 0);
+		Student dummyStudent = new Student("Stu", "de", "Student", "test", "test@student.hu.nl", 0);
 		for (Klas k : pKlassen) {
 			// per klas
 			String csvFile = "././CSV/" + k.getNaam() + ".csv";
