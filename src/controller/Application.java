@@ -44,5 +44,7 @@ public class Application {
 		server.registerHandler("/student/medestudenten/opslaan", medestudentenController);
 
 		server.start();
+
+		System.out.println(infoSysteem.getRooster("TICT-SIE-V1B"));
 	}
 }
