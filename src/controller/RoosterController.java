@@ -20,6 +20,14 @@ import server.Handler;
 public class RoosterController implements Handler {
     private PrIS informatieSysteem;
 
+    /**
+     * De StudentController klasse moet alle student-gerelateerde aanvragen
+     * afhandelen. Methode handle() kijkt welke URI is opgevraagd en laat
+     * dan de juiste methode het werk doen. Je kunt voor elke nieuwe URI
+     * een nieuwe methode schrijven.
+     *
+     * @param infoSys - het toegangspunt tot het domeinmodel
+     */
     public RoosterController(PrIS infoSys) {
         informatieSysteem = infoSys;
     }
@@ -28,8 +36,17 @@ public class RoosterController implements Handler {
         if (conversation.getRequestedURI().startsWith("/student/rooster/ophalen")) {
             ophalen(conversation);
         } else {
+
         }
     }
+
+    /**
+     * Deze methode haalt eerst de opgestuurde JSON-data op. Daarna worden
+     * de benodigde gegevens uit het domeinmodel gehaald. Deze gegevens worden
+     * dan weer omgezet naar JSON en teruggestuurd naar de Polymer-GUI!
+     *
+     * @param conversation - alle informatie over het request
+     */
     private void ophalen(Conversation conversation) {
         JsonObject lJsonObjectIn = (JsonObject) conversation.getRequestBodyAsJSON();
         String lGebruikersnaam = lJsonObjectIn.getString("username");
@@ -38,33 +55,38 @@ public class RoosterController implements Handler {
 
         Klas lKlas = informatieSysteem.getKlasVanStudent(lStudentZelf);		// klas van de student opzoeken
 
-        List<Student> lStudentenVanKlas = lKlas.getStudenten();	// medestudenten opzoeken
+        List<Rooster> lRooster = informatieSysteem.getRooster(); 	// medestudenten opzoeken
+        List<Rooster> lRoosterVanKlas = new ArrayList<Rooster>();
 
-        JsonArrayBuilder lJsonArrayBuilder = Json.createArrayBuilder();						// Uiteindelijk gaat er een array...
-
-        for (Student lMedeStudent : lStudentenVanKlas) {									        // met daarin voor elke medestudent een JSON-object...
-            if (lMedeStudent == lStudentZelf) 																			// behalve de student zelf...
-                continue;
-            else {
-                String lGroepIdAnder = lMedeStudent.getGroepId();
-                boolean lZelfdeGroep = ((lGroepIdZelf != "") && (lGroepIdAnder==lGroepIdZelf));
-                JsonObjectBuilder lJsonObjectBuilderVoorStudent = Json.createObjectBuilder(); // maak het JsonObject voor een student
-                String lLastName = lMedeStudent.getVolledigeAchternaam();
-                lJsonObjectBuilderVoorStudent
-                        .add("id", lMedeStudent.getStudentNummer())																	//vul het JsonObject
-                        .add("firstName", lMedeStudent.getVoornaam())
-                        .add("lastName", lLastName)
-                        .add("sameGroup", lZelfdeGroep);
-
-                lJsonArrayBuilder.add(lJsonObjectBuilderVoorStudent);													//voeg het JsonObject aan het array toe
+        for (Rooster r : lRooster){
+            if(r.getGroep().equals(lKlas.getKlasCode())){
+                lRoosterVanKlas.add(r);
             }
         }
+        List<Student> lStudentenVanKlas = lKlas.getStudenten();
 
-
-
-        JsonObjectBuilder lJob =	Json.createObjectBuilder();
-        lJob.add("errorcode", 0);
+        JsonArrayBuilder lJsonArrayBuilder = Json.createArrayBuilder();						// Uiteindelijk gaat er een array...
+        for (Rooster lRoosterVeld : lRoosterVanKlas){
+            JsonObjectBuilder lJsonObjectBuilderVoorRooster = Json.createObjectBuilder();
+            String lNaam = lRoosterVeld.getNaam();
+            String lCode = lRoosterVeld.getCursuscode();
+            String lStartDag = lRoosterVeld.getStartdag();
+            lJsonObjectBuilderVoorRooster
+                    .add("naam", lNaam)
+                    .add("code", lCode)
+                    .add("startdag", lStartDag);
+            lJsonArrayBuilder.add(lJsonObjectBuilderVoorRooster);
+        }
         String lJsonOutStr = lJsonArrayBuilder.build().toString();												// maak er een string van
         conversation.sendJSONMessage(lJsonOutStr);																				// string gaat terug naar de Polymer-GUI!
     }
+
+    /**
+     * Deze methode haalt eerst de opgestuurde JSON-data op. Op basis van deze gegevens
+     * het domeinmodel gewijzigd. Een eventuele errorcode wordt tenslotte
+     * weer (als JSON) teruggestuurd naar de Polymer-GUI!
+     *
+     * @param conversation - alle informatie over het request
+     */
+
 }
