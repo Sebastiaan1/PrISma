@@ -5,7 +5,7 @@ public class Docent extends Persoon {
 	private int docentNummer;
 
 	public Docent(String voornaam, String tussenvoegsel, String achternaam, String wachtwoord, String gebruikersnaam,
-			int docentNummer) {
+				  int docentNummer) {
 		super(voornaam, tussenvoegsel, achternaam, wachtwoord, gebruikersnaam);
 		docentNummer = 0;
 	}

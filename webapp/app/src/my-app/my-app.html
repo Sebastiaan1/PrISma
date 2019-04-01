@@ -92,45 +92,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           middels: document.querySelector('my-app').$.approuter.data={page: "xx"}
     -->
     <app-route id="approuter"
-      route="{{_ar_route}}"
-      pattern="/:page"
-      data="{{_ar_route_data}}"
-      tail="{{_ar_subroute}}">
+               route="{{_ar_route}}"
+               pattern="/:page"
+               data="{{_ar_route_data}}"
+               tail="{{_ar_subroute}}">
     </app-route>
     <!--  Matches everything starting with /xxx/
           and stores it in _ar_subroute_data.subpage
           geen id nodig -->
     <app-route
-      route="{{_ar_subroute}}"
-      pattern="/:subpage"
-      data="{{_ar_subroute_data}}"
-      tail="{{_ar_subsubroute}}">
+            route="{{_ar_subroute}}"
+            pattern="/:subpage"
+            data="{{_ar_subroute_data}}"
+            tail="{{_ar_subsubroute}}">
     </app-route>
     <!--  Matches everything starting with /xxx/yyy/
           and stores it in _ar_subsubroute_data.subsubpage
           geen id nodig -->
     <app-route
-      route="{{_ar_subsubroute}}"
-      pattern="/:subsubpage"
-      data="{{_ar_subsubroute_data}}">
+            route="{{_ar_subsubroute}}"
+            pattern="/:subsubpage"
+            data="{{_ar_subsubroute_data}}">
     </app-route>
 
 
     <!-- Main Toolbar -->
     <app-drawer-layout>
- 	  <app-drawer slot="drawer">
- 	    <!--  _ar_page bepaald welk menu geselecteerd is.
- 			  het menu dat de gebruiker klikt veroorzaakt een andere url
- 			  deze url wordt door <app-location> en <app-route> omgezet in variabelen
- 			  _ar_route , _ar_route_data en _ar_subroute
- 			  let op: _ar_page wordt niet door de selectie gewijzigd maar
- 					  vanuit de URL via een observer functie
- 					  er is dus een sterke gelijkenis tussen _ar_page en de URL
- 					  met name URL "xx/yy"  wordt _ar_page "xx_yy" maar ook
- 						       URL "/"      wordt _ar_page "home" en
- 						       overige URL  wordt _ar_page "view404".
- 		-->
- 		<!-- blue (empty) toolbar in menu -->
+      <app-drawer slot="drawer">
+        <!--  _ar_page bepaald welk menu geselecteerd is.
+              het menu dat de gebruiker klikt veroorzaakt een andere url
+              deze url wordt door <app-location> en <app-route> omgezet in variabelen
+              _ar_route , _ar_route_data en _ar_subroute
+              let op: _ar_page wordt niet door de selectie gewijzigd maar
+                      vanuit de URL via een observer functie
+                      er is dus een sterke gelijkenis tussen _ar_page en de URL
+                      met name URL "xx/yy"  wordt _ar_page "xx_yy" maar ook
+                               URL "/"      wordt _ar_page "home" en
+                               overige URL  wordt _ar_page "view404".
+        -->
+        <!-- blue (empty) toolbar in menu -->
         <app-toolbar class="toolbar">
           <img id="toolbarlogo" src="../../images/hu_logo.png" alt="HU" />
         </app-toolbar>
@@ -141,34 +141,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </a>
 
           <!-- altijd beschikbaar -->
+          <a name="systeem_instellen_systeemdatum" href$="[[_c_baseURL]]systeem_instellen_systeemdatum" >
+            <iron-icon icon="icons:today"></iron-icon>
+            <span>(test) Instellen systeemdatum</span>
+          </a>
 
           <a name="login" href$="[[_c_baseURL]]login"  verborgen$="[[!_are_strings_equal(_rol, 'undefined')]]">
             <iron-icon icon="account-box"></iron-icon>
             <span>Inloggen</span>
           </a>
-          <!-- Test -->
 
           <a name="logout" href$="[[_c_baseURL]]logout"  verborgen$="[[_are_strings_equal(_rol, 'undefined')]]">
             <iron-icon icon="account-box"></iron-icon>
             <span>Uitloggen</span>
           </a>
 
-          <a name="roosterpagina" href$="[[_c_baseURL]]roosterpagina"  verborgen$="[[_are_strings_equal(_rol, 'undefined')]]">
-            <iron-icon icon="date-range"></iron-icon>
-            <span>Rooster bekijken</span>
-          </a>
-
-          <a name="systeem_instellen_systeemdatum" href$="[[_c_baseURL]]systeem_instellen_systeemdatum" verborgen$="[[_are_strings_equal(_rol, 'docent')]]" >
-            <iron-icon icon="icons:today"></iron-icon>
-            <span>(test) Instellen systeemdatum</span>
-          </a>
-
           <!-- beschikbaar voor docent -->
 
           <!-- beschikbaar voor student -->
-          <a name="student_medestudenten" href$="[[_c_baseURL]]student_medestudenten" verborgen$="[[!_are_strings_equal(_rol, 'student')]]">
+          <a name="student_medestudenten" href$="[[_c_baseURL]]student_medestudenten"  verborgen$="[[!_are_strings_equal(_rol, 'student')]]">
             <iron-icon icon="social:group"></iron-icon>
             <span>Toon medestudenten</span>
+          </a>
+
+          <a name="student_rooster" href$="[[_c_baseURL]]student_rooster"  verborgen$="[[!_are_strings_equal(_rol, 'student')]]">
+            <iron-icon icon="social:group"></iron-icon>
+            <span>Toon rooster</span>
           </a>
 
         </iron-selector>
@@ -182,10 +180,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </app-toolbar>
 
       <iron-pages
-        attr-for-selected="page-name"
-        selected="[[_ar_page]]"
-        fallback-selection="view404"
-        role="main">
+              attr-for-selected="page-name"
+              selected="[[_ar_page]]"
+              fallback-selection="view404"
+              role="main">
         <!-- in iron-pages kun je niet handmatig een element selecteren.
        	     Het is dus zinloos om te coderen selected=_ar_page met {{}}
        	     Wel wordt _ar_selected_object gevuld met de sectie die hoort bij _ar_page
@@ -198,84 +196,102 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <!-- element$="none" of weglaten van element$ geeft beide aan dat er geen polymerElement gebruikt zal gaan worden -->
         <section page-name="home" title="HOME" element$="none">
           <paper-material elevation="1">
-              <p>Demo app gebaseerd op Polymer.</p>
-              <p>Deze app past nadat je bent ingelogged het menu aan, aan de rol die gekoppeld is aan de ingeloggede user.</p>
+            <p>Demo app gebaseerd op Polymer.</p>
+            <p>Deze app past nadat je bent ingelogged het menu aan, aan de rol die gekoppeld is aan de ingeloggede user.</p>
           </paper-material>
         </section>
 
         <section page-name="systeem_instellen_systeemdatum"
                  title="INSTELLEN SYSTEEMDATUM"
-              	 element$="my-systeemdatum">
-            <paper-material elevation="1">
-              <!--
+                 element$="my-systeemdatum">
+          <paper-material elevation="1">
+            <!--
+              c_visible="true" als deze section geselecteerd is.
+              LET OP: boolean values moeten als string doorgegeven worden,
+                      vandaar de quotes rondom de function aanroep.
+                      De aanwezige literal waarde wordt met enkele quotes doorgegeven
+            -->
+            <my-systeemdatum
+                    systeemdatumlokaal="{{_systeemdatumlokaal}}"
+                    systeemdatumstandaard="{{_systeemdatumstandaard}}"
+                    c_visible="[[_are_strings_equal(_ar_page, 'systeem_instellen_systeemdatum')]]">
+            </my-systeemdatum>
+          </paper-material>
+        </section>
+
+        <section page-name="login"
+                 title="LOGIN"
+                 element$="my-login">
+          <paper-material elevation="1" style="max-width: 380px;">'
+            <my-login username="{{_username}}" rol="{{_rol}}" ></my-login>
+          </paper-material>
+        </section>
+
+        <section page-name="logout"
+                 title="UITLOGGEN"
+                 element="my-logout">
+          <paper-material elevation="1">
+            <my-logout rol="{{_rol}}"></my-logout>
+          </paper-material>
+        </section>
+
+        <!-- sections voor docent -->
+
+        <!-- sections voor student -->
+        <section  page-name="student_medestudenten"
+                  title="OVERZICHT MEDESTUDENTEN"
+                  element$="my-medestudenten">
+          <paper-material elevation="1">
+            <!--
                 c_visible="true" als deze section geselecteerd is.
                 LET OP: boolean values moeten als string doorgegeven worden,
                         vandaar de quotes rondom de function aanroep.
                         De aanwezige literal waarde wordt met enkele quotes doorgegeven
-              -->
-              <my-systeemdatum
-                systeemdatumlokaal="{{_systeemdatumlokaal}}"
-                systeemdatumstandaard="{{_systeemdatumstandaard}}"
-                c_visible="[[_are_strings_equal(_ar_page, 'systeem_instellen_systeemdatum')]]">
-              </my-systeemdatum>
-            </paper-material>
-          </section>
+            -->
+            <my-medestudenten
+                    c_visible="[[_are_strings_equal(_ar_page, 'student_medestudenten')]]"
+                    c_rol="[[_rol]]"
+                    c_username="[[_username]]">
+            </my-medestudenten>
+          </paper-material>
+        </section>
 
-          <section page-name="login"
-              	   title="LOGIN"
-              	   element$="my-login">
-            <paper-material elevation="1" style="max-width: 380px;">'
-              <my-login username="{{_username}}" rol="{{_rol}}" ></my-login>
-            </paper-material>
-          </section>
+        <section  page-name="student_rooster"
+                  title="OVERZICHT rooster"
+                  element$="my-rooster">
+          <paper-material elevation="1">
+            <!--
+                c_visible="true" als deze section geselecteerd is.
+                LET OP: boolean values moeten als string doorgegeven worden,
+                        vandaar de quotes rondom de function aanroep.
+                        De aanwezige literal waarde wordt met enkele quotes doorgegeven
+            -->
+            <my-rooster
+                    c_visible="[[_are_strings_equal(_ar_page, 'student_rooster')]]"
+                    c_rol="[[_rol]]"
+                    c_username="[[_username]]">
+            </my-rooster>
+          </paper-material>
+        </section>
 
-          <section page-name="logout"
-                   title="UITLOGGEN"
-                   element="my-logout">
-            <paper-material elevation="1">
-              <my-logout rol="{{_rol}}"></my-logout>
-            </paper-material>
-          </section>
+        <section page-name="student_details" title="STUDENT DETAILS">
+          <paper-material elevation="1">
+            <h2 class="page-title">Student: [[_ar_subsubroute_data.subsubpage]]</h2>
+            <div>This is [[_ar_subsubroute_data.subsubpage]]'s section</div>
+          </paper-material>
+        </section>
 
-<!-- sections voor docent -->
-
- <!-- sections voor student -->
-          <section  page-name="student_medestudenten"
-                    title="OVERZICHT MEDESTUDENTEN"
-                    element$="my-medestudenten">
-            <paper-material elevation="1">
-              <!--
-                  c_visible="true" als deze section geselecteerd is.
-                  LET OP: boolean values moeten als string doorgegeven worden,
-                          vandaar de quotes rondom de function aanroep.
-                          De aanwezige literal waarde wordt met enkele quotes doorgegeven
-              -->
-              <my-medestudenten
-                c_visible="[[_are_strings_equal(_ar_page, 'student_medestudenten')]]"
-                c_rol="[[_rol]]"
-                c_username="[[_username]]">
-              </my-medestudenten>
-            </paper-material>
-          </section>
-
-          <section page-name="student_details" title="STUDENT DETAILS">
-            <paper-material elevation="1">
-              <h2 class="page-title">Student: [[_ar_subsubroute_data.subsubpage]]</h2>
-              <div>This is [[_ar_subsubroute_data.subsubpage]]'s section</div>
-            </paper-material>
-          </section>
-
-          <section page-name="view404"
-                    title="PAGE NOT FOUND"
-                    element$="my-view404">
-            <paper-material elevation="1">
-              <my-view404></my-view404>
-            </paper-material>
-          </section>
-        </iron-pages>
+        <section page-name="view404"
+                 title="PAGE NOT FOUND"
+                 element$="my-view404">
+          <paper-material elevation="1">
+            <my-view404></my-view404>
+          </paper-material>
+        </section>
+      </iron-pages>
     </app-drawer-layout>
 
-   </template>
+  </template>
   <script>
     (function() {
       'use strict';

@@ -18,7 +18,7 @@ public class PrIS {
     private ArrayList<Docent> deDocenten;
     private ArrayList<Student> deStudenten;
     private ArrayList<Klas> deKlassen;
-    private ArrayList<Rooster> deRooster;
+    private ArrayList<Rooster> deRoosters;
 
     /**
      * De constructor maakt een set met standaard-data aan. Deze data moet nog
@@ -45,13 +45,14 @@ public class PrIS {
     public PrIS() {
         deDocenten = new ArrayList<Docent>();
         deStudenten = new ArrayList<Student>();
+        deRoosters = new ArrayList<Rooster>();
         deKlassen = new ArrayList<Klas>(); // Inladen klassen
-        deRooster = new ArrayList<Rooster>();
         vulKlassen(deKlassen); // Inladen studenten in klassen
         vulStudenten(deStudenten, deKlassen);
         // Inladen docenten
         vulDocenten(deDocenten);
-        vulRooster(deRooster);
+        // Inladen roosters
+        vulRoosters(deRoosters);
 
     } // Einde Pris constructor
 
@@ -106,8 +107,8 @@ public class PrIS {
         return deStudenten.stream().filter(s -> s.getStudentNummer() == pStudentNummer).findFirst().orElse(null);
     }
 
-    public ArrayList<Rooster> getRooster() {
-        return deRooster;
+    public ArrayList<Rooster> getRoosters() {
+        return deRoosters;
     }
 
     public String login(String gebruikersnaam, String wachtwoord) {
@@ -130,6 +131,56 @@ public class PrIS {
         return "undefined";
     }
 
+    private void vulRoosters(ArrayList<Rooster> pRoosters) {
+        Rooster lRooster;
+        String csvFile = "././CSV/test.csv";
+        BufferedReader br = null;
+        String line = "";
+        String cvsSplitBy = ";";
+
+        try {
+            br = new BufferedReader(new FileReader(csvFile));
+
+            while ((line = br.readLine()) != null) {
+                String[] element = line.split(cvsSplitBy);
+
+                String naam = element[0];
+                String cursuscode = element[1];
+                int sWeek = Integer.parseInt(element[2]);
+                String sdag = element[3];
+                String sdatum = element[4];
+                String stijd = element[5];
+                String edag = element[6];
+                String edatum = element[7];
+                String etijd = element[8];
+                String duur = element[9];
+                String werkvorm = element[10];
+                String docent = element[11];
+                String lokaal = element[12];
+                String groep = element[13];
+                String faculteit = element[14];
+                int grootte = Integer.parseInt(element[15]);
+                String opmerking = element[16];
+
+                lRooster = new Rooster(naam, cursuscode, sWeek, sdag, sdatum, stijd, edag, edatum, etijd, duur, werkvorm, docent, lokaal, groep, faculteit, grootte, opmerking);
+                pRoosters.add(lRooster);
+
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     private void vulDocenten(ArrayList<Docent> pDocenten) {
         String csvFile = "././CSV/docenten.csv";
         BufferedReader br = null;
@@ -146,8 +197,7 @@ public class PrIS {
                 String voornaam = element[1];
                 String tussenvoegsel = element[2];
                 String achternaam = element[3];
-                String wachtwoord = element[4];
-                pDocenten.add(new Docent(voornaam, tussenvoegsel, achternaam, wachtwoord, gebruikersnaam, 1));
+                pDocenten.add(new Docent(voornaam, tussenvoegsel, achternaam, "geheim", gebruikersnaam, 1));
             }
 
         } catch (FileNotFoundException e) {
@@ -186,77 +236,6 @@ public class PrIS {
         pKlassen.add(k5);
     }
 
-    private void vulRooster(ArrayList<Rooster> dRooster){
-        Rooster lRooster;
-
-        String csvFile = "././CSV/test.csv";
-        BufferedReader br = null;
-        String line = "";
-        String cvsSplitBy = ";";
-
-        try {
-
-            br = new BufferedReader(new FileReader(csvFile));
-
-            while ((line = br.readLine()) != null) {
-                // line = line.replace(",,", ", ,");
-                // use comma as separator
-                String[] element = line.split(cvsSplitBy);
-
-//				int i;
-//
-//				for (i = 0; i < element.length; i++) {
-//					System.out.println(element[17]);
-//				}
-
-//				String gebruikersnaam = (element[3] + "." + element[2] + element[1] + "@student.hu.nl")
-//						.toLowerCase();
-//				// verwijder spaties tussen dubbele voornamen en tussen bv van der
-//				gebruikersnaam = gebruikersnaam.replace(" ", "");
-//				String lStudentNrString = element[0];
-//				int lStudentNr = Integer.parseInt(lStudentNrString);
-                // Volgorde 3-2-1 = voornaam, tussenvoegsel en achternaam
-
-                String naam = element[0];
-                String cursuscode = element[1];
-                int sWeek = Integer.parseInt(element[2]);
-                String sdag = element[3];
-                String sdatum = element[4];
-                String stijd = element[5];
-                String edag = element[6];
-                String edatum = element[7];
-                String etijd = element[8];
-                String duur = element[9];
-                String werkvorm = element[10];
-                String docent = element[11];
-                String lokaal = element[12];
-                String groep = element[13];
-                String faculteit = element[14];
-                int grootte = Integer.parseInt(element[15]);
-                String opmerking = element[16];
-
-                lRooster = new Rooster(naam, cursuscode, sWeek, sdag, sdatum, stijd, edag, edatum, etijd, duur, werkvorm, docent, lokaal, groep, faculteit, grootte, opmerking);
-                dRooster.add(lRooster);
-            }
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-//					Rooster r1 = new Rooster("Test", "Test", 1, "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test", 1, "Test");
-//					System.out.println(r1.getGroep());
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
     private void vulStudenten(ArrayList<Student> pStudenten, ArrayList<Klas> pKlassen) {
         Student lStudent;
         Student dummyStudent = new Student("Stu", "de", "Student", "geheim", "test@student.hu.nl", 0);
@@ -282,7 +261,7 @@ public class PrIS {
                     String lStudentNrString = element[0];
                     int lStudentNr = Integer.parseInt(lStudentNrString);
                     // Volgorde 3-2-1 = voornaam, tussenvoegsel en achternaam
-                    lStudent = new Student(element[3], element[2], element[1], element[4], gebruikersnaam, lStudentNr);
+                    lStudent = new Student(element[3], element[2], element[1], "geheim", gebruikersnaam, lStudentNr);
                     pStudenten.add(lStudent);
                     k.voegStudentToe(lStudent);
                 }

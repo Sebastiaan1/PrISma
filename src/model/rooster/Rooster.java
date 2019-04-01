@@ -1,12 +1,5 @@
 package model.rooster;
 
-import model.persoon.Docent;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class Rooster {
 
     private String naam, cursuscode, startdag, startdatum, starttijd, einddag ,einddatum, eindtijd, duur, werkvorm, docent, lokaalnummer, groep, faculteit, opmerking;
@@ -68,9 +61,30 @@ public class Rooster {
     public String getNaam(){
         return naam;
     }
+
     public String getGroep(){
         return this.groep;
     }
 
+    public String getStarttijd() { return this.starttijd; }
 
+    public String getEinddag() { return this.einddag; }
+
+    public String getEinddatum() { return this.einddatum; }
+
+    public String getEindtijd() { return this.eindtijd; }
+
+    public String getDuur() { return this.duur; }
+
+    public String getWerkvorm() { return this.werkvorm; }
+
+    public String getDocent() { return this.docent; }
+
+    public String getLokaalnummer() { return this.lokaalnummer; }
+
+    public String getFaculteit() { return this.faculteit; }
+
+    public String getOpmerking() { return this.opmerking; }
+
+    public int getGrootte() { return this.grootte; }
 }

@@ -43,6 +43,7 @@ public class Application {
 
 		server.registerHandler("/student/medestudenten/ophalen", medestudentenController);
 		server.registerHandler("/student/medestudenten/opslaan", medestudentenController);
+
 		server.registerHandler("/student/rooster/ophalen", roosterController);
 
 		server.start();

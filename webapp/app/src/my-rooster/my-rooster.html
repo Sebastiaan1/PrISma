@@ -12,9 +12,9 @@
      bij start van de applicatie.
 -->
 
-<dom-module id="my-medestudenten">
-    <template>
-        <style>
+<dom-module id="my-rooster">
+  <template>
+    <style>
       :host {
         display: block;
       }
@@ -62,57 +62,52 @@
       }
     </style>
 
-        <paper-toast
-                id="toast_invalid_aanroep"
-                duration="0"
-                text="U hebt dit scherm op een illegale manier geactiveerd. U wordt verwezen naar de home page!">
-            <paper-button on-click="_toast_clicked" class="toast-button">Sluiten</paper-button>
-        </paper-toast>
+    <paper-toast
+      id="toast_invalid_aanroep"
+      duration="0"
+      text="U hebt dit scherm op een illegale manier geactiveerd. U wordt verwezen naar de home page!">
+        <paper-button on-click="_toast_clicked" class="toast-button">Sluiten</paper-button>
+    </paper-toast>
 
-        <div class="my-title">Overzicht van medestudenten van [[c_username]]</div>
-        <table>
-            <tr>
-                <th class="voornaam">Voornaam </th>
-                <th class="achternaam">Achternaam </th>
-                <th class="groepid-header">Mede groepleden </th>
-            </tr>
-            <template is="dom-repeat" items="[[_c_studenten]]">
-                <tr>
-                    <td class="voornaam">  <a href$="#/student/details/[[item.firstName]]-[[item.lastName]]">[[item.firstName]]</a></td>
-                    <td class="achternaam"><a href$="#/student/details/[[item.firstName]]-[[item.lastName]]">[[item.lastName]] </a></td>
-                    <td class="groepid">
-                        <paper-checkbox
-                                class="my-check"
-                                checked="{{item.sameGroup}}">
-                        </paper-checkbox>
-                    </td>
-                </tr>
-            </template>
-        </table>
-        <paper-button
-                class="my-button"
-                on-click="_medestudenten_opslaan_request_handler">Opslaan
-        </paper-button>
+    <div class="my-title">Overzicht van rooster van [[c_username]]</div>
+    <table>
+      <tr>
+        <th class="voornaam">Naam </th>
+        <th class="achternaam">Cursuscode </th>
+        <th class="achternaam">Groep </th>
+      </tr>
+      <template is="dom-repeat" items="[[_c_studenten]]">
+        <tr>
+          <td class="voornaam"> [[item.naam]]</td>
+          <td class="achternaam">[[item.cursuscode]]</td>
+          <td class="achternaam">[[item.groep]]</td>
+        </tr>
+      </template>
+    </table>
+    <paper-button
+      class="my-button"
+      on-click="_rooster_opslaan_request_handler">Opslaan
+    </paper-button>
 
-        <iron-ajax
-                id="ajax_medestudenten_ophalen"
-                method="POST"
-                url="/student/medestudenten/ophalen"
-                handle-as="json"
-                on-response="_medestudenten_ophalen_response_handler">
-        </iron-ajax>
+    <iron-ajax
+      id="ajax_rooster_ophalen"
+      method="POST"
+      url="/student/rooster/ophalen"
+      handle-as="json"
+      on-response="_rooster_ophalen_response_handler">
+    </iron-ajax>
+ 
+    <iron-ajax
+      id="ajax_rooster_opslaan"
+      method="POST"
+      url="/student/rooster/opslaan"
+      handle-as="json"
+      on-response="_rooster_opslaan_response_handler">
+    </iron-ajax>
 
-        <iron-ajax
-                id="ajax_medestudenten_opslaan"
-                method="POST"
-                url="/student/medestudenten/opslaan"
-                handle-as="json"
-                on-response="_medestudenten_opslaan_response_handler">
-        </iron-ajax>
+  </template>
 
-    </template>
-
-    <script>
+  <script>
     (function() {
       'use strict';
       /* _xxxx private              : geen external data binding      - geen notify
@@ -121,7 +116,7 @@
          xxxx  public               : two way external databinding {{xxxx}} - notify nodig
       */
       Polymer({
-        is: 'my-medestudenten',
+        is: 'my-rooster',
 
         properties: {
           _c_studenten: {
@@ -154,7 +149,7 @@
         _initializing : function() {
           if (this.c_visible) {                                 // zodra zichtbaar geworden moet er wat worden gedaan
             if (this.c_rol=="student") {                        // voor studenten
-              this._medestudenten_ophalen_request_handler();    //    haal info op van server
+              this._rooster_ophalen_request_handler();    //    haal info op van server
             } else {                                            // na handmatige url wijziging zonder login
               var lToast = this.$.toast_invalid_aanroep;        // meldt ongeldige aanroep
               lToast.open();                                    /* het sluiten van deze error verwijst  */
@@ -163,32 +158,32 @@
           }
         },
 
-        _medestudenten_ophalen_request_handler: function() {
-          console.log("_medestudenten_ophalen_request_handler user="+this.c_username);
-          this.$.ajax_medestudenten_ophalen.contentType="application/json";
-          this.$.ajax_medestudenten_ophalen.body={
+        _rooster_ophalen_request_handler: function() {
+          console.log("_rooster_ophalen_request_handler user="+this.c_username);
+          this.$.ajax_rooster_ophalen.contentType="application/json";
+          this.$.ajax_rooster_ophalen.body={
             "username":this.c_username
           };
-          this.$.ajax_medestudenten_ophalen.generateRequest();
+          this.$.ajax_rooster_ophalen.generateRequest();
         },
 
-        _medestudenten_ophalen_response_handler: function(request) {
-          console.log("_mededestudenten_ophalen_response_handler aantal studenten="+request.detail.response.length);
+        _rooster_ophalen_response_handler: function(request) {
+          console.log("_rooster_ophalen_response_handler aantal studenten="+request.detail.response.length);
           this._c_studenten = request.detail.response;
         },
 
-        _medestudenten_opslaan_request_handler: function() {
-          console.log("_medestudenten_opslaan_request_handler user="+this.c_username);
-          this.$.ajax_medestudenten_opslaan.contentType="application/json";
-          this.$.ajax_medestudenten_opslaan.body={
+        _rooster_opslaan_request_handler: function() {
+          console.log("_rooster_opslaan_request_handler user="+this.c_username);
+          this.$.ajax_rooster_opslaan.contentType="application/json";
+          this.$.ajax_rooster_opslaan.body={
               "username":this.c_username,
               "groupMembers": this._c_studenten
           };
-          this.$.ajax_medestudenten_opslaan.generateRequest();
+          this.$.ajax_rooster_opslaan.generateRequest();
         },
 
-        _medestudenten_opslaan_response_handler: function(request) {
-          console.log("_mededestudenten_opslaan_response_handler errorcode="+request.detail.response.errorcode);
+        _rooster_opslaan_response_handler: function(request) {
+          console.log("_rooster_opslaan_response_handler errorcode="+request.detail.response.errorcode);
           this._go_home();		/* verlaat de pagina en ga terug naar home page */
         },
 
