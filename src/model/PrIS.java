@@ -12,42 +12,47 @@ import java.util.Calendar;
 import model.klas.Klas;
 import model.persoon.Docent;
 import model.persoon.Student;
+import model.rooster.Rooster;
 
 public class PrIS {
 	private ArrayList<Docent> deDocenten;
 	private ArrayList<Student> deStudenten;
 	private ArrayList<Klas> deKlassen;
+	private ArrayList<Rooster> deRoosters;
 
 	/**
 	 * De constructor maakt een set met standaard-data aan. Deze data moet nog
 	 * uitgebreidt worden met rooster gegevens die uit een bestand worden ingelezen,
 	 * maar dat is geen onderdeel van deze demo-applicatie!
-	 * 
+	 *
 	 * De klasse PrIS (PresentieInformatieSysteem) heeft nu een meervoudige
 	 * associatie met de klassen Docent, Student, Vakken en Klassen Uiteraard kan
 	 * dit nog veel verder uitgebreid en aangepast worden!
-	 * 
+	 *
 	 * De klasse fungeert min of meer als ingangspunt voor het domeinmodel. Op dit
 	 * moment zijn de volgende methoden aanroepbaar:
-	 * 
+	 *
 	 * String login(String gebruikersnaam, String wachtwoord) Docent
 	 * getDocent(String gebruikersnaam) Student getStudent(String gebruikersnaam)
 	 * ArrayList<Student> getStudentenVanKlas(String klasCode)
-	 * 
+	 *
 	 * Methode login geeft de rol van de gebruiker die probeert in te loggen, dat
 	 * kan 'student', 'docent' of 'undefined' zijn! Die informatie kan gebruikt
 	 * worden om in de Polymer-GUI te bepalen wat het volgende scherm is dat getoond
 	 * moet worden.
-	 * 
+	 *
 	 */
 	public PrIS() {
 		deDocenten = new ArrayList<Docent>();
 		deStudenten = new ArrayList<Student>();
+		deRoosters = new ArrayList<Rooster>();
 		deKlassen = new ArrayList<Klas>(); // Inladen klassen
 		vulKlassen(deKlassen); // Inladen studenten in klassen
 		vulStudenten(deStudenten, deKlassen);
 		// Inladen docenten
 		vulDocenten(deDocenten);
+		// Inladen roosters
+		vulRoosters(deRoosters);
 
 	} // Einde Pris constructor
 
@@ -102,6 +107,10 @@ public class PrIS {
 		return deStudenten.stream().filter(s -> s.getStudentNummer() == pStudentNummer).findFirst().orElse(null);
 	}
 
+	public ArrayList<Rooster> getRoosters() {
+		return deRoosters;
+	}
+
 	public String login(String gebruikersnaam, String wachtwoord) {
 		for (Docent d : deDocenten) {
 			if (d.getGebruikersnaam().equals(gebruikersnaam)) {
@@ -122,6 +131,56 @@ public class PrIS {
 		return "undefined";
 	}
 
+	private void vulRoosters(ArrayList<Rooster> pRoosters) {
+		Rooster lRooster;
+		String csvFile = "././CSV/test.csv";
+		BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ";";
+
+		try {
+			br = new BufferedReader(new FileReader(csvFile));
+
+			while ((line = br.readLine()) != null) {
+				String[] element = line.split(cvsSplitBy);
+
+				String naam = element[0];
+				String cursuscode = element[1];
+				int sWeek = Integer.parseInt(element[2]);
+				String sdag = element[3];
+				String sdatum = element[4];
+				String stijd = element[5];
+				String edag = element[6];
+				String edatum = element[7];
+				String etijd = element[8];
+				String duur = element[9];
+				String werkvorm = element[10];
+				String docent = element[11];
+				String lokaal = element[12];
+				String groep = element[13];
+				String faculteit = element[14];
+				int grootte = Integer.parseInt(element[15]);
+				String opmerking = element[16];
+
+				lRooster = new Rooster(naam, cursuscode, sWeek, sdag, sdatum, stijd, edag, edatum, etijd, duur, werkvorm, docent, lokaal, groep, faculteit, grootte, opmerking);
+				pRoosters.add(lRooster);
+
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 	private void vulDocenten(ArrayList<Docent> pDocenten) {
 		String csvFile = "././CSV/docenten.csv";
 		BufferedReader br = null;
@@ -138,8 +197,7 @@ public class PrIS {
 				String voornaam = element[1];
 				String tussenvoegsel = element[2];
 				String achternaam = element[3];
-				String wachtwoord = element[4];
-				pDocenten.add(new Docent(voornaam, tussenvoegsel, achternaam, wachtwoord, gebruikersnaam, 1));
+				pDocenten.add(new Docent(voornaam, tussenvoegsel, achternaam, "geheim", gebruikersnaam, 1));
 			}
 
 		} catch (FileNotFoundException e) {
@@ -203,7 +261,7 @@ public class PrIS {
 					String lStudentNrString = element[0];
 					int lStudentNr = Integer.parseInt(lStudentNrString);
 					// Volgorde 3-2-1 = voornaam, tussenvoegsel en achternaam
-					lStudent = new Student(element[3], element[2], element[1], element[4], gebruikersnaam, lStudentNr);
+					lStudent = new Student(element[3], element[2], element[1], "geheim", gebruikersnaam, lStudentNr);
 					pStudenten.add(lStudent);
 					k.voegStudentToe(lStudent);
 				}
