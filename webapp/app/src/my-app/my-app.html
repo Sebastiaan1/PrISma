@@ -158,7 +158,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <span>Rooster bekijken</span>
           </a>
 
-          <a name="systeem_instellen_systeemdatum" href$="[[_c_baseURL]]systeem_instellen_systeemdatum" verborgen$="[[_are_strings_equal(_rol, 'docent')]]" >
+          <a name="systeem_instellen_systeemdatum" href$="[[_c_baseURL]]systeem_instellen_systeemdatum" verborgen$="[[_are_strings_equal(_rol, 'undefined')]]" >
             <iron-icon icon="icons:today"></iron-icon>
             <span>(test) Instellen systeemdatum</span>
           </a>
@@ -403,7 +403,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		     een object te maken en via dit een lokaledatumstring te maken */
 		  var eenDatumObject             = new Date(); // is vandaag
 		  this._systeemdatumstandaard    = this.date_to_standaard_string(eenDatumObject);
-		  this._systeemdatumlokaal       = eenDatumObject.toLocaleDateString();
+      this._systeemdatumlokaal       = eenDatumObject.toLocaleDateString();
+      
+      function readCookie(name) {
+    	    var nameEQ = name + "=";
+    	    var ca = document.cookie.split(';');
+    	    for(var i=0;i < ca.length;i++) {
+    	        var c = ca[i];
+    	        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+    	        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    	    }
+    	    return null;
+    	}
+
+    	var value = readCookie('username');
+    	
+      if(value != null)
+    	  {
+    	  	this._rol = readCookie('rol');
+          console.log(this._rol);
+          this._username = value;
+    	  }
 		  console.log("application ready to run");
         },
 
@@ -440,10 +460,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	      }
 	      return lokaledatumstring;
         },
+        
+
 
       });
 
     })();
   </script>
-
 </dom-module>

@@ -165,6 +165,9 @@
           } else {                                            // als aanloggen ok
             this.$.email_element.invalid = false;               // verwijder fout markering
             this.$.wachtwoord_element.invalid = false;          // verwijder fout markering
+            document.cookie = "username=" + this.$.email_element.value; 
+            document.cookie = "password=" + this.$.wachtwoord_element.value; 
+            document.cookie = "rol=" + this.rol;
             this._go_home();                                    // ga naar de home page.
           }
         },
