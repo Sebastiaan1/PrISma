@@ -60,6 +60,101 @@
         margin-top: 5px;                    /* enlarge thet default */
         margin-left: 0px;                   /* reduce the default */
       }
+          vaadin-grid#material {
+
+      font-family: Roboto, sans-serif;
+      --divider-color: rgba(0, 0, 0, var(--dark-divider-opacity));
+
+      --vaadin-grid-cell: {
+        padding: 0;
+      };
+
+      --vaadin-grid-header-cell: {
+        height: 64px;
+        color: rgba(0, 0, 0, var(--dark-secondary-opacity));
+        font-size: 12px;
+      };
+
+      --vaadin-grid-body-cell: {
+        height: 48px;
+        color: rgba(0, 0, 0, var(--dark-primary-opacity));
+        font-size: 13px;
+      };
+
+      --vaadin-grid-body-row-hover-cell: {
+        background-color: var(--paper-grey-200);
+      };
+
+      --vaadin-grid-body-row-selected-cell: {
+        background-color: var(--paper-grey-100);
+      };
+
+      --vaadin-grid-focused-cell: {
+        box-shadow: none;
+        font-weight: bold;
+      };
+    }
+
+    vaadin-grid#material .cell {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-right: 56px;
+    }
+
+    vaadin-grid#material .cell.last {
+      padding-right: 24px;
+    }
+
+    vaadin-grid#material .cell.numeric {
+      text-align: right;
+    }
+
+    vaadin-grid#material paper-checkbox {
+      --primary-color: var(--paper-indigo-500);
+      margin: 0 24px;
+    }
+
+    vaadin-grid#material vaadin-grid-sorter {
+      --vaadin-grid-sorter-arrow: {
+        display: none !important;
+      };
+    }
+
+    vaadin-grid#material vaadin-grid-sorter .cell {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    vaadin-grid#material vaadin-grid-sorter iron-icon {
+      transform: scale(0.8);
+    }
+
+    vaadin-grid#material vaadin-grid-sorter:not([direction]) iron-icon {
+      color: rgba(0, 0, 0, var(--dark-disabled-opacity));
+    }
+
+    vaadin-grid#material vaadin-grid-sorter[direction] {
+      color: rgba(0, 0, 0, var(--dark-primary-opacity));
+    }
+
+    vaadin-grid#material vaadin-grid-sorter[direction=desc] iron-icon {
+      transform: scale(0.8) rotate(180deg);
+    }
+    :host {
+        display: block;
+      }
+
+      .details {
+        padding: 10px;
+        margin: 10px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+        font-size: 20px;
+      }
     </style>
 
         <paper-toast
@@ -68,22 +163,39 @@
                 text="U hebt dit scherm op een illegale manier geactiveerd. U wordt verwezen naar de home page!">
             <paper-button on-click="_toast_clicked" class="toast-button">Sluiten</paper-button>
         </paper-toast>
+        <div id="titel" class="my-title">Overzicht van rooster van [[c_username]]</div>
 
-        <div class="my-title">Overzicht van rooster van [[c_username]]</div>
-        <table>
-            <tr>
-                <th class="voornaam">Naam </th>
-                <th class="achternaam">Cursuscode </th>
-                <th class="achternaam">Groep </th>
-            </tr>
-            <template is="dom-repeat" items="[[_c_studenten]]">
-                <tr>
-                    <td class="voornaam"> [[item.naam]]</td>
-                    <td class="achternaam">[[item.cursuscode]]</td>
-                    <td class="achternaam">[[item.groep]]</td>
-                </tr>
+        <vaadin-grid on-active-item-changed="_onActiveItemChanged" id="grid" aria-label="Expanded Items Example" items="[[_c_studenten]]" size="200">
+
+            <template class="row-details">
+                <div class="details">
+                    <paper-input id="[[item.id]]" on-input="_addValueToInput"></paper-input>
+                    <input id="hidden[[item.id]]" type="hidden" value="">
+                    <paper-button
+                            id="[[item.id]]"
+                            class="my-button"
+                            on-click="_rooster_opslaan_request_handler">Opslaan
+
+                    </paper-button>
+                </div>
             </template>
-        </table>
+
+            <vaadin-grid-column width="50px" flex-grow="0">
+                <template class="header">#</template>
+                <template>[[item.id]]</template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column>
+                <template class="header">First Name</template>
+                <template>[[item.naam]]</template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column>
+                <template class="header">Last Name</template>
+                <template>[[item.cursuscode]]</template>
+            </vaadin-grid-column>
+
+        </vaadin-grid>
         <paper-button
                 class="my-button"
                 on-click="_rooster_opslaan_request_handler">Opslaan
@@ -108,6 +220,15 @@
     </template>
 
     <script>
+    addEventListener('WebComponentsReady', function() {
+      Polymer({
+        is: 'my-rooster',
+
+        _onActiveItemChanged: function(e) {
+          this.$.grid.expandedItems = [e.detail.value];
+        }
+      });
+    });
     (function() {
       'use strict';
       /* _xxxx private              : geen external data binding      - geen notify
@@ -136,6 +257,9 @@
                                                                    regel in de functie dat er niets gebeurd
                                                                    als c_visible false is */
           },
+          c_presentie: {
+            type: String
+          }
         },
 
         _go_home: function() {
@@ -145,7 +269,16 @@
                                                         // door de two way binding in <app-route> en <app-location>
                                                         // zal ook de url echt wijzigen
         },
-
+         _onActiveItemChanged: function(e) {
+        var grid = e.target;
+        if (e.detail.value) {
+          if (this._lastActive && this._lastActive !== e.detail.value) {
+            grid.closeItemDetails(this._lastActive);
+          }
+          grid.openItemDetails(e.detail.value);
+          this._lastActive = e.detail.value;
+        }
+      },
         _initializing : function() {
           if (this.c_visible) {                                 // zodra zichtbaar geworden moet er wat worden gedaan
             if (this.c_rol=="student") {                        // voor studenten
@@ -157,7 +290,12 @@
             }
           }
         },
+        _addValueToInput: function(e){
+            var pInput = e.target.id;
+            var hInput = Polymer.dom(this.root).querySelector("#hidden"+pInput+"")
+            hInput.value = e.target.value;
 
+        },
         _rooster_ophalen_request_handler: function() {
           console.log("_rooster_ophalen_request_handler user="+this.c_username);
           this.$.ajax_rooster_ophalen.contentType="application/json";
@@ -172,12 +310,16 @@
           this._c_studenten = request.detail.response;
         },
 
-        _rooster_opslaan_request_handler: function() {
+        _rooster_opslaan_request_handler: function(e) {
+          var pInput = e.target.id;
+          var hInput = Polymer.dom(this.root).querySelector("#hidden"+pInput+"")
+          var presentie = hInput.value;
           console.log("_rooster_opslaan_request_handler user="+this.c_username);
           this.$.ajax_rooster_opslaan.contentType="application/json";
           this.$.ajax_rooster_opslaan.body={
               "username":this.c_username,
-              "groupMembers": this._c_studenten
+              "presentie": presentie,
+              "lesid": e.target.id
           };
           this.$.ajax_rooster_opslaan.generateRequest();
         },

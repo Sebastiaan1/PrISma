@@ -140,10 +140,10 @@ public class PrIS {
 
 		try {
 			br = new BufferedReader(new FileReader(csvFile));
-
+			int uniekeN = 0;
 			while ((line = br.readLine()) != null) {
 				String[] element = line.split(cvsSplitBy);
-
+				uniekeN++;
 				String naam = element[0];
 				String cursuscode = element[1];
 				int sWeek = Integer.parseInt(element[2]);
@@ -162,7 +162,7 @@ public class PrIS {
 				int grootte = Integer.parseInt(element[15]);
 				String opmerking = element[16];
 
-				lRooster = new Rooster(naam, cursuscode, sWeek, sdag, sdatum, stijd, edag, edatum, etijd, duur, werkvorm, docent, lokaal, groep, faculteit, grootte, opmerking);
+				lRooster = new Rooster(uniekeN, naam, cursuscode, sWeek, sdag, sdatum, stijd, edag, edatum, etijd, duur, werkvorm, docent, lokaal, groep, faculteit, grootte, opmerking);
 				pRoosters.add(lRooster);
 
 			}

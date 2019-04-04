@@ -141,6 +141,7 @@
                                                                    regel in de functie dat er niets gebeurd
                                                                    als c_visible false is */
           },
+
         },
 
         ready: function()  {
@@ -205,7 +206,7 @@
           this.$.ajax_medestudenten_opslaan.contentType="application/json";
           this.$.ajax_medestudenten_opslaan.body={
               "username":this.c_username,
-              "groupMembers": this._c_studenten
+                  "groupMembers": this._c_studenten
           };
           this.$.ajax_medestudenten_opslaan.generateRequest();
         },

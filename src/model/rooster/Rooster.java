@@ -1,13 +1,17 @@
 package model.rooster;
 
+import java.util.ArrayList;
+
 public class Rooster {
 
     private String naam, cursuscode, startdag, startdatum, starttijd, einddag ,einddatum, eindtijd, duur, werkvorm, docent, lokaalnummer, groep, faculteit, opmerking;
-    private int startweek, grootte;
+    private int id, startweek, grootte;
+    private ArrayList presentie = new ArrayList();
 
-    public Rooster(String naam, String cursuscode, int startweek, String startdag, String startdatum, String starttijd, String einddag , String einddatum, String eindtijd, String duur, String werkvorm, String docent, String lokaalnummer, String groep, String faculteit, int grootte, String opmerking){
+    public Rooster(int id, String naam, String cursuscode, int startweek, String startdag, String startdatum, String starttijd, String einddag , String einddatum, String eindtijd, String duur, String werkvorm, String docent, String lokaalnummer, String groep, String faculteit, int grootte, String opmerking){
 
         // String
+        this.id = id;
         this.naam = naam;
         this.cursuscode = cursuscode;
         this.startdag = startdag;
@@ -87,4 +91,14 @@ public class Rooster {
     public String getOpmerking() { return this.opmerking; }
 
     public int getGrootte() { return this.grootte; }
+
+    public int getId() {return this.id;}
+
+    public void setId(int uniek) { id = uniek;}
+
+    public ArrayList getPresentie() { return this.presentie;}
+
+    public void setPresentie(String[] pres){
+        presentie.add(pres);
+    }
 }

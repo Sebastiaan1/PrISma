@@ -3,10 +3,7 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 
 import model.PrIS;
 import model.klas.Klas;
@@ -25,6 +22,8 @@ public class RoosterController implements Handler {
     public void handle(Conversation conversation) {
         if (conversation.getRequestedURI().startsWith("/student/rooster/ophalen")) {
             ophalen(conversation);
+        } else {
+            opslaan(conversation);
         }
     }
 
@@ -53,6 +52,7 @@ public class RoosterController implements Handler {
 
         for (Rooster lRoosterVeld : lRoosterVanKlas) {
             JsonObjectBuilder lJsonObjectBuilderVoorRooster = Json.createObjectBuilder();
+            int uniekeId = lRoosterVeld.getId();
             String lNaam = lRoosterVeld.getNaam();
             String lCode = lRoosterVeld.getCursuscode();
             int lStartweek = lRoosterVeld.getStartweek();
@@ -71,6 +71,7 @@ public class RoosterController implements Handler {
             String lOpmerking = lRoosterVeld.getOpmerking();
             String lStartdag = lRoosterVeld.getStartdag();
             lJsonObjectBuilderVoorRooster
+                    .add("id", uniekeId)
                     .add("naam", lNaam)
                     .add("cursuscode", lCode)
                     .add("startweek", lStartweek)
@@ -92,5 +93,24 @@ public class RoosterController implements Handler {
         }
         String lJsonOutStr = lJsonArrayBuilder.build().toString();
         conversation.sendJSONMessage(lJsonOutStr);
+    }
+
+    private void opslaan(Conversation conversation) {
+        JsonObject lJsonObjectIn = (JsonObject) conversation.getRequestBodyAsJSON();
+        String lGebruikersnaam = lJsonObjectIn.getString("username");
+        Student lStudent = informatiesysteem.getStudent(lGebruikersnaam);
+
+        List<Rooster> lRooster = informatiesysteem.getRoosters();
+
+        System.out.println(lJsonObjectIn.getString("presentie"));
+        System.out.println(lJsonObjectIn.getString("lesid"));
+        System.out.println(lJsonObjectIn.getString("username"));
+
+        JsonObjectBuilder lJob =	Json.createObjectBuilder();
+        lJob.add("errorcode", 0);
+        String lJsonOutStr = lJob.build().toString();
+        conversation.sendJSONMessage(lJsonOutStr);					// terug naar de Polymer-GUI!
+
+
     }
 }

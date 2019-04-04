@@ -1,10 +1,13 @@
 //checked
 package model.persoon;
 
+import java.util.ArrayList;
+
 public class Student extends Persoon {
 
 	private int studentNummer;
 	private String groepId;
+	private ArrayList presentie = new ArrayList();
 
 	public Student(String pVoornaam, String pTussenvoegsel, String pAchternaam, String pWachtwoord,
 			String pGebruikersnaam, int sStudentNummer) {
@@ -33,6 +36,12 @@ public class Student extends Persoon {
 
 	public int getStudentNummer() {
 		return this.studentNummer;
+	}
+
+	public ArrayList getPresentie() { return this.presentie;}
+
+	public void setPresentie(String[] pres) {
+		presentie.add(pres);
 	}
 
 }
