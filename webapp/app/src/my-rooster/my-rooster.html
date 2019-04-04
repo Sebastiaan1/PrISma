@@ -137,6 +137,7 @@
                                                                    als c_visible false is */
           },
         },
+        
 
         _go_home: function() {
           var lApp = document.querySelector('my-app');  //het polymer element <my-app>
@@ -146,9 +147,20 @@
                                                         // zal ook de url echt wijzigen
         },
 
+        readCookie: function (name) {
+    	    var nameEQ = name + "=";
+    	    var ca = document.cookie.split(';');
+    	    for(var i=0;i < ca.length;i++) {
+    	        var c = ca[i];
+    	        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+    	        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    	    }
+    	    return null;
+    	},
+
         _initializing : function() {
           if (this.c_visible) {                                 // zodra zichtbaar geworden moet er wat worden gedaan
-            if (this.c_rol=="student") {                        // voor studenten
+            if (this.readCookie('rol')=="student") {                        // voor studenten
               this._rooster_ophalen_request_handler();    //    haal info op van server
             } else {                                            // na handmatige url wijziging zonder login
               var lToast = this.$.toast_invalid_aanroep;        // meldt ongeldige aanroep
@@ -162,7 +174,7 @@
           console.log("_rooster_ophalen_request_handler user="+this.c_username);
           this.$.ajax_rooster_ophalen.contentType="application/json";
           this.$.ajax_rooster_ophalen.body={
-            "username":this.c_username
+            "username":this.readCookie('username')
           };
           this.$.ajax_rooster_ophalen.generateRequest();
         },
@@ -176,7 +188,7 @@
           console.log("_rooster_opslaan_request_handler user="+this.c_username);
           this.$.ajax_rooster_opslaan.contentType="application/json";
           this.$.ajax_rooster_opslaan.body={
-              "username":this.c_username,
+              "username":this.readCookie('username'),
               "groupMembers": this._c_studenten
           };
           this.$.ajax_rooster_opslaan.generateRequest();
