@@ -197,7 +197,8 @@ public class PrIS {
 				String voornaam = element[1];
 				String tussenvoegsel = element[2];
 				String achternaam = element[3];
-				pDocenten.add(new Docent(voornaam, tussenvoegsel, achternaam, "geheim", gebruikersnaam, 1));
+				String wachtwoord = element[4];
+				pDocenten.add(new Docent(voornaam, tussenvoegsel, achternaam, wachtwoord, gebruikersnaam, 1));
 			}
 
 		} catch (FileNotFoundException e) {
@@ -261,7 +262,7 @@ public class PrIS {
 					String lStudentNrString = element[0];
 					int lStudentNr = Integer.parseInt(lStudentNrString);
 					// Volgorde 3-2-1 = voornaam, tussenvoegsel en achternaam
-					lStudent = new Student(element[3], element[2], element[1], "geheim", gebruikersnaam, lStudentNr);
+					lStudent = new Student(element[3], element[2], element[1], element[4], gebruikersnaam, lStudentNr);
 					pStudenten.add(lStudent);
 					k.voegStudentToe(lStudent);
 				}

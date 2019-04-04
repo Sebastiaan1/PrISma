@@ -420,6 +420,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  var eenDatumObject             = new Date(); // is vandaag
 		  this._systeemdatumstandaard    = this.date_to_standaard_string(eenDatumObject);
 		  this._systeemdatumlokaal       = eenDatumObject.toLocaleDateString();
+		    my-app.html
+function readCookie(name) {
+    	    var nameEQ = name + "=";
+    	    var ca = document.cookie.split(';');
+    	    for(var i=0;i < ca.length;i++) {
+    	        var c = ca[i];
+    	        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+    	        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    	    }
+    	    return null;
+    	}
+
+    	var value = readCookie('username');
+    	
+      if(value != null)
+    	  {
+    	  	this._rol = readCookie('rol');
+          console.log(this._rol);
+          this._username = value;
+    	  }
 		  console.log("application ready to run");
         },
 
