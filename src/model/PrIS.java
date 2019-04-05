@@ -111,6 +111,10 @@ public class PrIS {
 		return deRoosters;
 	}
 
+	public ArrayList<Klas> getKlassen() {
+		return deKlassen;
+	}
+
 	public String login(String gebruikersnaam, String wachtwoord) {
 		for (Docent d : deDocenten) {
 			if (d.getGebruikersnaam().equals(gebruikersnaam)) {

@@ -8,8 +8,10 @@ import java.util.ListIterator;
 
 import javax.json.*;
 
+
 import model.PrIS;
 import model.klas.Klas;
+import model.persoon.Docent;
 import model.persoon.Student;
 import model.rooster.Rooster;
 import server.Conversation;
@@ -25,36 +27,33 @@ public class RoosterDocentController implements Handler {
     public void handle(Conversation conversation) {
         if (conversation.getRequestedURI().startsWith("/docent/rooster/ophalen")) {
             ophalen(conversation);
-        } else {
+        }
+        else {
             opslaan(conversation);
         }
     }
 
     private void ophalen(Conversation conversation) {
-
         JsonObject lJsonObjectIn = (JsonObject) conversation.getRequestBodyAsJSON();
         String lGebruikersnaam = lJsonObjectIn.getString("username");
-        Student lStudentZelf = informatiesysteem.getStudent(lGebruikersnaam);
-        String lGroepZelf = lStudentZelf.getGroepId();
-
-        Klas lKlas = informatiesysteem.getKlasVanStudent(lStudentZelf);
+        Docent lDocentZelf = informatiesysteem.getDocent(lGebruikersnaam);
 
         List<Rooster> lRooster = informatiesysteem.getRoosters();
-        List<Rooster> lRoosterVanKlas = new ArrayList<Rooster>();
+        List<Rooster> lRoosterVanDocent = new ArrayList<Rooster>();
 
         for (Rooster r : lRooster) {
-            String[] groepen = r.getGroep().split(",");
-            for (String groep : groepen) {
-                String tGroep = groep.trim();
-                if (tGroep.contains(lKlas.getKlasCode())) {
-                    lRoosterVanKlas.add(r);
+            String[] docenten = r.getDocent().split(",");
+            for (String docent : docenten) {
+                String tDocent = docent.trim();
+                if (tDocent.contains(lGebruikersnaam)) {
+                    lRoosterVanDocent.add(r);
                 }
             }
         }
 
         JsonArrayBuilder lJsonArrayBuilder = Json.createArrayBuilder();
 
-        for (Rooster lRoosterVeld : lRoosterVanKlas) {
+        for (Rooster lRoosterVeld : lRoosterVanDocent) {
             JsonObjectBuilder lJsonObjectBuilderVoorRooster = Json.createObjectBuilder();
             int uniekeId = lRoosterVeld.getId();
             String lNaam = lRoosterVeld.getNaam();
@@ -74,6 +73,10 @@ public class RoosterDocentController implements Handler {
             int lGrootte = lRoosterVeld.getGrootte();
             String lOpmerking = lRoosterVeld.getOpmerking();
             String lStartdag = lRoosterVeld.getStartdag();
+            ArrayList<ArrayList<String>> lPresentie = lRoosterVeld.getPresentie();
+
+
+
             lJsonObjectBuilderVoorRooster
                     .add("id", uniekeId)
                     .add("naam", lNaam)
@@ -92,48 +95,14 @@ public class RoosterDocentController implements Handler {
                     .add("groep", lGroep)
                     .add("faculteit", lFaculteit)
                     .add("grootte", lGrootte)
-                    .add("opmerking", lOpmerking);
+                    .add("opmerking", lOpmerking)
+                    .add("presentie", lPresentie.toString());
             lJsonArrayBuilder.add(lJsonObjectBuilderVoorRooster);
+            System.out.println(lRoosterVeld);
         }
         String lJsonOutStr = lJsonArrayBuilder.build().toString();
         conversation.sendJSONMessage(lJsonOutStr);
 
-//        ArrayList<Integer> a1 = new ArrayList<Integer>();
-//
-//        a1.add(1);
-//        a1.add(2);
-//
-//        ArrayList<Integer> a3 = new ArrayList<Integer>();
-//        a3.add(10);
-//        a3.add(20);
-//        a3.add(30);
-//
-//        for (Rooster r : lRooster){
-//            if (r.getId() == 1){
-//                r.setPresentie(a1);
-//                r.setPresentie(a3);
-//
-//            }
-//        }
-//        for (Rooster r : lRooster) {
-//            if (r.getId() == 1){
-//                System.out.println(r.getPresentie().get(1).get(2));
-//
-//            }
-//        }
-        for (Rooster r : lRooster) {
-            if (!r.getPresentie().isEmpty()){
-                for (ArrayList<String> v : r.getPresentie()){
-                    if (v.get(0).equals(lGebruikersnaam)){
-                        System.out.println("");
-                        System.out.println(v.get(0));
-                        System.out.println(v.get(1));
-                        System.out.println(v.get(2));
-                    }
-                }
-            }
-
-        }
     }
 
     private void opslaan(Conversation conversation) {
@@ -169,38 +138,10 @@ public class RoosterDocentController implements Handler {
                             r.setPresentie(values);
                         }
                     }
-//                    for (ArrayList<String> v : r.getPresentie()){
-//                        if (v.get(0).equals(lGebruikersnaam)){
-////                            v.set(0, lPresentie);
-//                        } else {
-//                            r.setPresentie(values);
-//                        }
-//                    }
-//                    if (r.getPresentie().get(0).equals(lGebruikersnaam)){
-//                        r.getPresentie().set(2, lPresentie);
-//                    } else {
-//                        r.setPresentie(values);
-//                    }
+
                 }
             }
-////            if (r.getId() == Integer.parseInt(lLesId)){
-////                if(r.getPresentie().get(0).equals(lGebruikersnaam)) {
-////                    r.setPresentie(values);
-////                }
-////            }
-////            else
-////
-////            if (r.getId() == Integer.parseInt(lLesId) && !r.getPresentie().isEmpty() && r.getPresentie().get(0).equals(lGebruikersnaam)){
-////                System.out.println(r.getPresentie().get(2));
-////                System.out.println(r.getPresentie().get(0));
-////                r.getPresentie().set(2, lPresentie);
-////            } else if (r.getId() == Integer.parseInt(lLesId)) {
-////                    if (r.getPresentie().isEmpty()){
-////
-////                    }
-//////                r.setPresentie(values);
-////            }
-//
+
         }
 
         JsonObjectBuilder lJob =	Json.createObjectBuilder();

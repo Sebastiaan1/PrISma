@@ -36,7 +36,7 @@ public class RoosterController implements Handler {
         String lGebruikersnaam = lJsonObjectIn.getString("username");
         Student lStudentZelf = informatiesysteem.getStudent(lGebruikersnaam);
         String lGroepZelf = lStudentZelf.getGroepId();
-
+        System.out.println(lStudentZelf.getPresentie());
         Klas lKlas = informatiesysteem.getKlasVanStudent(lStudentZelf);
 
         List<Rooster> lRooster = informatiesysteem.getRoosters();
@@ -126,6 +126,7 @@ public class RoosterController implements Handler {
                 for (ArrayList<String> v : r.getPresentie()){
                     if (v.get(0).equals(lGebruikersnaam)){
                         System.out.println("");
+                        System.out.println("Current presentie");
                         System.out.println(v.get(0));
                         System.out.println(v.get(1));
                         System.out.println(v.get(2));
@@ -148,6 +149,8 @@ public class RoosterController implements Handler {
         Student lStudent = informatiesysteem.getStudent(lGebruikersnaam);
 
         List<Rooster> lRooster = informatiesysteem.getRoosters();
+
+
 
         for (Rooster r : lRooster){
             if (r.getId() == Integer.parseInt(lLesId)) {

@@ -250,11 +250,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         vandaar de quotes rondom de function aanroep.
                         De aanwezige literal waarde wordt met enkele quotes doorgegeven
             -->
-            <my-rooster
+            <my-roosterdocent
                     c_visible="[[_are_strings_equal(_ar_page, 'docent_rooster')]]"
                     c_rol="[[_rol]]"
                     c_username="[[_username]]">
-            </my-rooster>
+            </my-roosterdocent>
           </paper-material>
         </section>
 
@@ -441,7 +441,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  var eenDatumObject             = new Date(); // is vandaag
 		  this._systeemdatumstandaard    = this.date_to_standaard_string(eenDatumObject);
 		  this._systeemdatumlokaal       = eenDatumObject.toLocaleDateString();
-		    my-app.html
 function readCookie(name) {
     	    var nameEQ = name + "=";
     	    var ca = document.cookie.split(';');
@@ -454,7 +453,7 @@ function readCookie(name) {
     	}
 
     	var value = readCookie('username');
-    	
+
       if(value != null)
     	  {
     	  	this._rol = readCookie('rol');

@@ -2,12 +2,13 @@
 package model.persoon;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Student extends Persoon {
 
 	private int studentNummer;
 	private String groepId;
-	private ArrayList presentie = new ArrayList();
+	private ArrayList<List> presentie = new ArrayList<List>();
 
 	public Student(String pVoornaam, String pTussenvoegsel, String pAchternaam, String pWachtwoord,
 			String pGebruikersnaam, int sStudentNummer) {
@@ -38,9 +39,9 @@ public class Student extends Persoon {
 		return this.studentNummer;
 	}
 
-	public Object getPresentie(int i) { return this.presentie.get(i);}
+	public ArrayList<List> getPresentie() { return this.presentie;}
 
-	public void setPresentie(String[] pres) {
+	public void setPresentie(List pres) {
 		presentie.add(pres);
 	}
 

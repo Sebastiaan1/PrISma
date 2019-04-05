@@ -165,18 +165,13 @@
         </paper-toast>
         <div id="titel" class="my-title">Overzicht van rooster van [[c_username]]</div>
 
-        <vaadin-grid on-active-item-changed="_onActiveItemChanged" id="grid" aria-label="Expanded Items Example" items="[[_c_studenten]]" size="200">
+        <vaadin-grid on-active-item-changed="_onActiveItemChanged" id="grid" aria-label="Expanded Items Example" items="[[_c_rooster]]" size="200">
 
             <template class="row-details">
                 <div class="details">
-                    <paper-input id="[[item.id]]" on-input="_addValueToInput"></paper-input>
-                    <input id="hidden[[item.id]]" type="hidden" value="">
-                    <paper-button
-                            id="[[item.id]]"
-                            class="my-button"
-                            on-click="_rooster_opslaan_request_handler">Opslaan
+                    [[item.presentie]]
+                    <div id="trash">[[item.naam]]</div>
 
-                    </paper-button>
                 </div>
             </template>
 
@@ -198,13 +193,13 @@
         </vaadin-grid>
         <paper-button
                 class="my-button"
-                on-click="_rooster_opslaan_request_handler">Opslaan
+                on-click="_get_shit">Opslaan
         </paper-button>
 
         <iron-ajax
                 id="ajax_rooster_ophalen"
                 method="POST"
-                url="/student/rooster/ophalen"
+                url="/docent/rooster/ophalen"
                 handle-as="json"
                 on-response="_rooster_ophalen_response_handler">
         </iron-ajax>
@@ -212,7 +207,7 @@
         <iron-ajax
                 id="ajax_rooster_opslaan"
                 method="POST"
-                url="/student/rooster/opslaan"
+                url="/docent/rooster/opslaan"
                 handle-as="json"
                 on-response="_rooster_opslaan_response_handler">
         </iron-ajax>
@@ -220,15 +215,7 @@
     </template>
 
     <script>
-    addEventListener('WebComponentsReady', function() {
-      Polymer({
-        is: 'my-roosterdocent',
 
-        _onActiveItemChanged: function(e) {
-          this.$.grid.expandedItems = [e.detail.value];
-        }
-      });
-    });
     (function() {
       'use strict';
       /* _xxxx private              : geen external data binding      - geen notify
@@ -240,7 +227,7 @@
         is: 'my-roosterdocent',
 
         properties: {
-          _c_studenten: {
+          _c_rooster: {
             type: Array,           /* array<student-info>: student-info = {id, firstName, lastName, sameGroup}
 										array is constant groepnr is changable */
           },
@@ -257,9 +244,6 @@
                                                                    regel in de functie dat er niets gebeurd
                                                                    als c_visible false is */
           },
-          c_presentie: {
-            type: String
-          }
         },
 
         _go_home: function() {
@@ -281,7 +265,8 @@
       },
         _initializing : function() {
           if (this.c_visible) {                                 // zodra zichtbaar geworden moet er wat worden gedaan
-            if (this.c_rol=="student") {                        // voor studenten
+            if (this.c_rol=="docent") {                        // voor studenten
+              console.log("test");
               this._rooster_ophalen_request_handler();    //    haal info op van server
             } else {                                            // na handmatige url wijziging zonder login
               var lToast = this.$.toast_invalid_aanroep;        // meldt ongeldige aanroep
@@ -302,12 +287,19 @@
           this.$.ajax_rooster_ophalen.body={
             "username":this.c_username
           };
+
           this.$.ajax_rooster_ophalen.generateRequest();
         },
 
         _rooster_ophalen_response_handler: function(request) {
           console.log("_rooster_ophalen_response_handler aantal studenten="+request.detail.response.length);
-          this._c_studenten = request.detail.response;
+          this._c_rooster = request.detail.response;
+          var trash = Polymer.dom(this.root).querySelector("#trash");
+              console.log(trash)
+        },
+        _get_shit: function() {
+            var trash = Polymer.dom(this.root).querySelector("#trash")
+            console.log(trash);
         },
 
         _rooster_opslaan_request_handler: function(e) {
