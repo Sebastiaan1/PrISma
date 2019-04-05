@@ -154,53 +154,18 @@ public class RoosterController implements Handler {
                 if (r.getPresentie().isEmpty()){
                     r.setPresentie(values);
                 } else {
-                    ListIterator<ArrayList<String>> iter = r.getPresentie().listIterator();
-                    while (iter.hasNext()) {
-                        ArrayList<String> arr = iter.next();
-                        System.out.println(arr);
-                        if(Integer.parseInt(arr.get(1)) == Integer.parseInt(lLesId) && arr.get(0).equals(lGebruikersnaam)){
-                            System.out.println(arr);
-                            ArrayList<String> a3 = new ArrayList<String>();
-                            a3.add(lGebruikersnaam);
-                            a3.add(lLesId);
-                            a3.add(lPresentie);
-                            iter.set(a3);
+                    ArrayList<ArrayList<String>> tmp = r.getPresentie();
+                    int count = 0;
+                    for (int i=0; i<tmp.size(); i++) {
+                        if (Integer.parseInt(tmp.get(i).get(1)) == Integer.parseInt(lLesId) && tmp.get(i).get(0).equals(lGebruikersnaam)){
+                            tmp.get(i).set(2, lPresentie);
                         } else {
                             r.setPresentie(values);
                         }
                     }
-//                    for (ArrayList<String> v : r.getPresentie()){
-//                        if (v.get(0).equals(lGebruikersnaam)){
-////                            v.set(0, lPresentie);
-//                        } else {
-//                            r.setPresentie(values);
-//                        }
-//                    }
-//                    if (r.getPresentie().get(0).equals(lGebruikersnaam)){
-//                        r.getPresentie().set(2, lPresentie);
-//                    } else {
-//                        r.setPresentie(values);
-//                    }
                 }
             }
-////            if (r.getId() == Integer.parseInt(lLesId)){
-////                if(r.getPresentie().get(0).equals(lGebruikersnaam)) {
-////                    r.setPresentie(values);
-////                }
-////            }
-////            else
-////
-////            if (r.getId() == Integer.parseInt(lLesId) && !r.getPresentie().isEmpty() && r.getPresentie().get(0).equals(lGebruikersnaam)){
-////                System.out.println(r.getPresentie().get(2));
-////                System.out.println(r.getPresentie().get(0));
-////                r.getPresentie().set(2, lPresentie);
-////            } else if (r.getId() == Integer.parseInt(lLesId)) {
-////                    if (r.getPresentie().isEmpty()){
-////
-////                    }
-//////                r.setPresentie(values);
-////            }
-//
+
         }
 
         JsonObjectBuilder lJob =	Json.createObjectBuilder();
