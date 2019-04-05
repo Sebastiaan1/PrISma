@@ -1,12 +1,14 @@
 package model.rooster;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Rooster {
 
     private String naam, cursuscode, startdag, startdatum, starttijd, einddag ,einddatum, eindtijd, duur, werkvorm, docent, lokaalnummer, groep, faculteit, opmerking;
     private int id, startweek, grootte;
-    private ArrayList presentie = new ArrayList();
+    private  ArrayList<ArrayList<String>> presentie = new ArrayList<ArrayList<String>>();
 
     public Rooster(int id, String naam, String cursuscode, int startweek, String startdag, String startdatum, String starttijd, String einddag , String einddatum, String eindtijd, String duur, String werkvorm, String docent, String lokaalnummer, String groep, String faculteit, int grootte, String opmerking){
 
@@ -96,9 +98,9 @@ public class Rooster {
 
     public void setId(int uniek) { id = uniek;}
 
-    public ArrayList getPresentie() { return this.presentie;}
+    public ArrayList<ArrayList<String>> getPresentie() { return this.presentie;}
 
-    public void setPresentie(String[] pres){
+    public void setPresentie(ArrayList<String> pres){
         presentie.add(pres);
     }
 }

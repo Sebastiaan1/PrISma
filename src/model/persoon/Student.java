@@ -38,7 +38,7 @@ public class Student extends Persoon {
 		return this.studentNummer;
 	}
 
-	public ArrayList getPresentie() { return this.presentie;}
+	public Object getPresentie(int i) { return this.presentie.get(i);}
 
 	public void setPresentie(String[] pres) {
 		presentie.add(pres);

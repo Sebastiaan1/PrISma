@@ -15,15 +15,15 @@ import model.rooster.Rooster;
 import server.Conversation;
 import server.Handler;
 
-public class RoosterController implements Handler {
+public class RoosterDocentController implements Handler {
     private PrIS informatiesysteem;
 
-    public RoosterController(PrIS infoSys) {
+    public RoosterDocentController(PrIS infoSys) {
         informatiesysteem = infoSys;
     }
 
     public void handle(Conversation conversation) {
-        if (conversation.getRequestedURI().startsWith("/student/rooster/ophalen")) {
+        if (conversation.getRequestedURI().startsWith("/docent/rooster/ophalen")) {
             ophalen(conversation);
         } else {
             opslaan(conversation);

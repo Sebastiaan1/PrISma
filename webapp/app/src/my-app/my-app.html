@@ -157,6 +157,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </a>
 
           <!-- beschikbaar voor docent -->
+          <a name="docent_rooster" href$="[[_c_baseURL]]docent_rooster"  verborgen$="[[!_are_strings_equal(_rol, 'docent')]]">
+            <iron-icon icon="social:group"></iron-icon>
+            <span>Toon rooster</span>
+          </a>
 
           <!-- beschikbaar voor student -->
           <a name="student_medestudenten" href$="[[_c_baseURL]]student_medestudenten"  verborgen$="[[!_are_strings_equal(_rol, 'student')]]">
@@ -236,6 +240,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </section>
 
         <!-- sections voor docent -->
+        <section  page-name="docent_rooster"
+                  title="OVERZICHT rooster"
+                  element$="my-roosterdocent">
+          <paper-material elevation="1">
+            <!--
+                c_visible="true" als deze section geselecteerd is.
+                LET OP: boolean values moeten als string doorgegeven worden,
+                        vandaar de quotes rondom de function aanroep.
+                        De aanwezige literal waarde wordt met enkele quotes doorgegeven
+            -->
+            <my-rooster
+                    c_visible="[[_are_strings_equal(_ar_page, 'docent_rooster')]]"
+                    c_rol="[[_rol]]"
+                    c_username="[[_username]]">
+            </my-rooster>
+          </paper-material>
+        </section>
 
         <!-- sections voor student -->
         <section  page-name="student_medestudenten"
