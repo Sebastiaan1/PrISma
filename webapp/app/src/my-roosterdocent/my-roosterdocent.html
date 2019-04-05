@@ -167,10 +167,15 @@
 
         <vaadin-grid on-active-item-changed="_onActiveItemChanged" id="grid" aria-label="Expanded Items Example" items="[[_c_rooster]]" size="200">
 
-            <template class="row-details">
-                <div class="details">
-                    [[item.presentie]]
-                    <div id="trash">[[item.naam]]</div>
+            <template class="row-details" >
+                <div class="details" >
+                    <template is="dom-repeat" items="[[_c_studenten]]">
+
+                        [[item.0]]
+                        [[item.1]]
+                        [[item.2]]
+                    </template>
+
 
                 </div>
             </template>
@@ -244,6 +249,9 @@
                                                                    regel in de functie dat er niets gebeurd
                                                                    als c_visible false is */
           },
+          _c_studenten: {
+            type: Array
+          }
         },
 
         _go_home: function() {
@@ -261,6 +269,21 @@
           }
           grid.openItemDetails(e.detail.value);
           this._lastActive = e.detail.value;
+<!--          var trash = JSON.parse(Polymer.dom(this.root).querySelector("#trash").innerHTML);-->
+<!--            div = Polymer.dom(this.root).querySelector("#trash")-->
+<!--          trash.forEach(function(data){-->
+
+
+
+
+<!--            data.forEach(function(d){-->
+<!--                var span = document.createElement('span');-->
+<!--                div.appendChild(span);-->
+<!--                span.innerHTML += d;-->
+<!--            })-->
+
+<!--          });-->
+<!--          console.log(trash);-->
         }
       },
         _initializing : function() {
@@ -294,12 +317,9 @@
         _rooster_ophalen_response_handler: function(request) {
           console.log("_rooster_ophalen_response_handler aantal studenten="+request.detail.response.length);
           this._c_rooster = request.detail.response;
-          var trash = Polymer.dom(this.root).querySelector("#trash");
-              console.log(trash)
-        },
-        _get_shit: function() {
-            var trash = Polymer.dom(this.root).querySelector("#trash")
-            console.log(trash);
+          var arr = JSON.parse(request.detail.response[0].presentie)
+          this._c_studenten = arr
+          console.log(this._c_studenten)
         },
 
         _rooster_opslaan_request_handler: function(e) {

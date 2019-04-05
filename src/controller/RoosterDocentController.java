@@ -1,14 +1,12 @@
 package controller;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 import javax.json.*;
 
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import model.PrIS;
 import model.klas.Klas;
 import model.persoon.Docent;
@@ -24,7 +22,7 @@ public class RoosterDocentController implements Handler {
         informatiesysteem = infoSys;
     }
 
-    public void handle(Conversation conversation) {
+    public void handle(Conversation conversation)   {
         if (conversation.getRequestedURI().startsWith("/docent/rooster/ophalen")) {
             ophalen(conversation);
         }
@@ -33,7 +31,8 @@ public class RoosterDocentController implements Handler {
         }
     }
 
-    private void ophalen(Conversation conversation) {
+    private void ophalen(Conversation conversation)  {
+        try {
         JsonObject lJsonObjectIn = (JsonObject) conversation.getRequestBodyAsJSON();
         String lGebruikersnaam = lJsonObjectIn.getString("username");
         Docent lDocentZelf = informatiesysteem.getDocent(lGebruikersnaam);
@@ -75,8 +74,7 @@ public class RoosterDocentController implements Handler {
             String lStartdag = lRoosterVeld.getStartdag();
             ArrayList<ArrayList<String>> lPresentie = lRoosterVeld.getPresentie();
 
-
-
+            ObjectMapper objectMapper = new ObjectMapper();
             lJsonObjectBuilderVoorRooster
                     .add("id", uniekeId)
                     .add("naam", lNaam)
@@ -96,13 +94,23 @@ public class RoosterDocentController implements Handler {
                     .add("faculteit", lFaculteit)
                     .add("grootte", lGrootte)
                     .add("opmerking", lOpmerking)
-                    .add("presentie", lPresentie.toString());
+                    .add("presentie", objectMapper.writeValueAsString(lPresentie));
             lJsonArrayBuilder.add(lJsonObjectBuilderVoorRooster);
             System.out.println(lRoosterVeld);
         }
+
         String lJsonOutStr = lJsonArrayBuilder.build().toString();
         conversation.sendJSONMessage(lJsonOutStr);
-
+//        ArrayList<ArrayList<String>> input = new ArrayList<>();
+//        for(int i = 1; i<=10; i++) {
+//            input.add(new ArrayList<>(Arrays.asList(String.valueOf(2*i),String.valueOf(3*i))));
+//        }
+//
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        System.out.println(objectMapper.writeValueAsString(input));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
     private void opslaan(Conversation conversation) {
